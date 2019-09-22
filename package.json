@@ -1,0 +1,19 @@
+{
+  "name": "howtogo-api",
+  "version": "1.0.0",
+  "description": "Data API Server for HowToGo Service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2pow4/HowToGo-API.git"
+  },
+  "author": "cadenzah",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/2pow4/HowToGo-API/issues"
+  },
+  "homepage": "https://github.com/2pow4/HowToGo-API#readme"
+}
