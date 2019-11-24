@@ -22,6 +22,11 @@ URI|메서드|설명
   - `departure_time = <출발 시간>`
   - `arrival_time = <도착 시간>`
 
+- Request Example:
+  ```
+  /routes?departure_place=
+  ```
+
 - Response Form:
   ```json
   [
