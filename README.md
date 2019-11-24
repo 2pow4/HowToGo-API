@@ -2,6 +2,10 @@
 
 HowToGo 서비스에 사용될 데이터를 제공하는 API
 
+## API 소개
+
+[API 소개 문서🛠](https://github.com/2pow4/HowToGo-API/blob/master/APIDOC.md)를 참고하시기 바랍니다.
+
 ## How to Run
 
 1. 의존 모듈 설치
@@ -14,24 +18,18 @@ $ npm install
 
 ```bash
 PORT=<API 서버의 포트 번호>
-DB_IP=<DB 서버의 IP 주소>
-DB_PORT=<DB 서버의 포트 번호>
-DB_NAME=<사용할 DB의 이름>
+API_KEY=<공공 API 사용을 위한 API Key>
 ```
 
-`.env`를 설정하지 않을 경우, `app.js` 내에 설정된 기본값으로 작동합니다.
+`PORT`는 기본 입력값이 `3000`이지만, `API_KEY` 값을 제공하지 않으면 서버가 정상적으로 실행되지 않습니다.
 
-3. MongoDB 실행
-
-4. 서버 실행
+3. 서버 실행
 
 ```bash
 $ npm run start
 API Server: 8080번 포트에서 대기중
-DB Server: 27017번 포트에서 대기중
 ```
 
 ## Tech Stack
 
 - Node.js
-- Mongoose
