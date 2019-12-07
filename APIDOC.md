@@ -3,10 +3,12 @@
 ## API Specification
 
 ### Index
-
 - [`/locations`](#get/locations)
 - [`/routes`](#get/routes)
 - [`/routes/gps`](#get/routes/gps)
+- [Appendix #1: 공공데이터 API 사용시 엔드포인트](#appendix1)
+- [Appendix #2: 사용한 공공데이터 API 서비스](#appendix2)
+- [참고한 문서](#reference)
 
 <a name="get/locations"></a>
 ### 도시, 정류소명의 목록 조회
@@ -113,7 +115,8 @@ URI|메서드|설명
   }
   ```
 
-## 공공데이터 API 사용시 엔드포인트
+<a name="appendix1"></a>
+## Appendix #1: 공공데이터 API 사용시 엔드포인트
 ```
 http://openapi.tago.go.kr/openapi/service/<서비스_영문명>/<오퍼레이션_영문명>?ServiceKey=<API_키>
 ```
@@ -121,8 +124,10 @@ http://openapi.tago.go.kr/openapi/service/<서비스_영문명>/<오퍼레이션
 ### 요청 예시
 ```
 http://openapi.tago.go.kr/openapi/service/ExpBusInfoService/getCtyCodeList?ServiceKey=1234567890
+→ 고속버스정보 서비스를 이용하여 도시 코드 목록을 요청
 ```
 
+<a name="appendix2"></a>
 ## 사용한 공공데이터 API 서비스
 
 번호|서비스명|영문명
@@ -250,7 +255,7 @@ http://openapi.tago.go.kr/openapi/service/ExpBusInfoService/getCtyCodeList?Servi
   7|depAirportNm|출발공항
   8|arrAirportNm|도착공항
 
-
+<a name="reference"></a>
 ## 참고한 문서
 
 - [국토교통부 OpenAPI 활용가이드](https://www.data.go.kr/commonUser/fileDownload.do?atchFileId=FILE_000000001498053&fileDetailSn=0) - 고속버스, 시외버스, 열차
