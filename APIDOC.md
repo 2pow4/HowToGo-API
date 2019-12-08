@@ -63,15 +63,23 @@ URI|메서드|설명
         "date": "출발일자(YYYY-MM-DD)", // string
         "type": "교통수단의 종류", // string
         "cost": "해당 노선 가격", // number
-        "time_spent": "소요 시간", // number
-        "departure_time": "출발 시간(HH:MM)", // string
-        "departure_city": "출발 도시명", // string
-        "departure_location": "출발 정류소명", // string
-        "departure_location_id": "출발 정류소 ID", //string
-        "arrival_time": "도착 시간(HH:MM)", // string
-        "arrival_city": "도착 도시명", // string
-        "arrival_location": "도착 정류소", // string
-        "arrival_location_id": "도착 정류소 ID", // string
+        "timeSpent": "소요 시간", // number
+        "departureTime": "출발 시간(HH:MM)", // string
+        "departureCity": "출발 도시명", // string
+        "departureLocation": "출발 정류소명", // string
+        "departureLocationId": "출발 정류소 ID", //string
+        "departureGPS": {
+          "lat": "출발 정류소의 위도 (Latitude)", // string
+          "long": "출발 정류소의 경도 (Longitude)" // string
+        },
+        "arrivalTime": "도착 시간(HH:MM)", // string
+        "arrivalCity": "도착 도시명", // string
+        "arrivalLocation": "도착 정류소", // string
+        "arrivalLocationId": "도착 정류소 ID", // string
+        "arrivalGPS": {
+          "lat": "출발 정류소의 위도 (Latitude)", // string
+          "long": "출발 정류소의 경도 (Longitude)" // string
+        },
       },
       ...
     ],

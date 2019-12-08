@@ -15,14 +15,15 @@ const publicAPIKey = process.env.PUBLIC_API_KEY
 
 const City = require('../schemas/city')
 const Location = require('../schemas/location')
-connect(dbUsername, dbPwd, dbIP, dbPort, dbName)
 
-// 0-1. DB로부터 도시코드를 불러온다
-// 0-2. 해당 도시코드를 각각 이용하여 (약 100개) 정류소들을 불러온다
-City.find()
+connect(dbUsername, dbPwd, dbIP, dbPort, dbName)
+  .then(() => {
+    // 0-1. DB로부터 도시코드를 불러온다
+    // 0-2. 해당 도시코드를 각각 이용하여 (약 100개) 정류소들을 불러온다
+    return City.find()
+  })
   // 1. 한 도시코드에 대하여
   //    해당 도시코드를 통하여 정류소 조회
-  // 
   .then(cityList => {
     const locationFetchValues = cityList.map((city) => {
       const { cityCode } = city
@@ -59,7 +60,6 @@ City.find()
   })
   // 2. Promise.all로 한번에 불러오기
   .then(locationPromisesWithCityCode => {
-    console.log('2')
     return Promise.all(locationPromisesWithCityCode)
   })
   .catch((err) => {
@@ -72,11 +72,11 @@ City.find()
     locationPromiseResultList.map((locationPromiseResult) => {
       const cityCode = locationPromiseResult.cityCode
       const locations = locationPromiseResult.data.response.body.items
-      const locationsInCity = locations.map((location) => {
+      const locationsInCity = locations.map((locations) => {
         const locationDocument = new Location({
           cityCode: cityCode,
-          locationCode: location.terminalId,
-          locationName: location.terminalNm,
+          locationCode: locations.terminalId,
+          locationName: locations.terminalNm,
           type: 'suburb',
         })
         return locationDocument
