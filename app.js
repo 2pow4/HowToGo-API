@@ -4,13 +4,17 @@ const logger = require('morgan')
 require('dotenv').config()
 
 const port = process.env.PORT || 8080
+
+const dbUsername = process.env.dbUsername
+const dbPwd = process.env.dbPwd
 const dbIP = process.env.DB_IP || 'localhost'
 const dbPort = process.env.DB_PORT || 27017
 const dbName = process.env.DB_NAME || 'how-to-go'
+
 const connect = require('./schemas')
 
 const app = express()
-connect(dbIP, dbPort, dbName)
+connect(dbUsername, dbPwd, dbIP, dbPort, dbName)
 
 app.use(logger('dev'))
 app.use(express.json())
@@ -18,11 +22,14 @@ app.use(express.urlencoded({ extended: false }))
 
 // Routers separated in routes/ folder
 // const <router> = require('./routes/<router-name>.js')
+const routesRouter = require('./routes')
+const locationsRouter = require('./locations')
 
 // app.use('/<routing-uri>', <router>)
+app.use('/locations', locationsRouter)
+app.use('/routes', routesRouter)
 
 // Other than the routings above, will get error message from the service
-
 app.use((req, res, next) => {
   const err = new Error('Not Found');
   err.status = 404;
