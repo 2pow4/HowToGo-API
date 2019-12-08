@@ -24,26 +24,31 @@ axios.get(`http://openapi.tago.go.kr/openapi/service/ExpBusInfoService/getCtyCod
       return cityList
     }
   })
-  // 2. input data entries into database
-  .then((cityList) => {
+  // 2. generate new list of cities,
+  // drop previous collection if exists
+  .then(async (cityList) => {
     // get the length of City collection
-    City.countDocuments((err, length) => {
-      const cityListDocuments = cityList.map((city) => {
-        const cityDocument = new City({
-          cityCode: city.cityCode,
-          cityName: city.cityName,
-        })
-        return cityDocument
+    const length = await City.countDocuments()
+    const cityListDocuments = cityList.map((city) => {
+      const cityDocument = new City({
+        cityCode: city.cityCode,
+        cityName: city.cityName,
       })
-  
-      if (length > 0) {
-        mongoose.connection.db.dropCollection('cities')
-          .then((result) => {
-            cityListDocuments.map((cityDocument) => cityDocument.save())
-          })
-      } else {
-        cityListDocuments.map((cityDocument) => cityDocument.save())
-      }
+      return cityDocument
     })
+
+    if (length > 0) {
+      await mongoose.connection.db.dropCollection('cities')
+    }
+    return cityListDocuments
   })
-  // 3. exit
+  // 3. insert new data
+  .then((cityListDocuments) => {
+    return City.insertMany(cityListDocuments)
+  })
+  // 4. if success, exit function
+  .then((result) => {
+    if (!!result) {
+      process.exit(0)
+    }
+  })

@@ -3,11 +3,12 @@ const { Schema } = mongoose
 const { ObjectId } = Schema.Types
 
 const locationSchema = new Schema({
-  city: {
-    // 해당 정류소가 속한 지역 도큐먼트의 ID
-    // 이후 활용시 Location.find().populate('city') 식으로 사용 필요
-    // 초기 데이터 입력시, city에 ObjectId 입력해야 함
-    type: ObjectId,
+  cityCode: {
+    type: String,
+    required: true,
+  },
+  locationCode: {
+    type: String,
     required: true,
   },
   locationName: {
