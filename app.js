@@ -22,14 +22,15 @@ app.use(express.urlencoded({ extended: false }))
 
 // Routers separated in routes/ folder
 // const <router> = require('./routes/<router-name>.js')
-const routesRouter = require('./routes')
-const locationsRouter = require('./locations')
+const routesRouter = require('./routes/routes')
+const locationsRouter = require('./routes/locations')
 
 // app.use('/<routing-uri>', <router>)
 app.use('/locations', locationsRouter)
 app.use('/routes', routesRouter)
 
 // Other than the routings above, will get error message from the service
+
 app.use((req, res, next) => {
   const err = new Error('Not Found');
   err.status = 404;
@@ -38,7 +39,7 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
-  console.log(err)
+  console.error(err)
   res.json({
     msg: "잘못된 경로의 접속입니다."
   })

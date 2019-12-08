@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx nodemon --exec node app",
     "updateCities": "node ./scripts/updateCities",
-    "updateSuburb": "node ./scripts/updateSuburb"
+    "updateSuburb": "node ./scripts/updateSuburb",
+    "updateExpress": "node ./scripts/updateExpress"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "morgan": "^1.9.1"
   },
   "devDependencies": {
-    "nodemon": "^1.19.2"
+    "nodemon": "^1.19.2",
+    "xlsx": "^0.15.3"
   }
 }

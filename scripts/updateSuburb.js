@@ -1,4 +1,4 @@
-// UPDATE DATABASE - Location Collection / Suburb Bus
+// UPDATE DATABASE - Location Collection: Suburb Bus
 const mongoose = require('mongoose')
 const connect = require('../schemas')
 const path = require('path')
@@ -77,7 +77,7 @@ City.find()
           cityCode: cityCode,
           locationCode: location.terminalId,
           locationName: location.terminalNm,
-          type: 'bus'
+          type: 'suburb',
         })
         return locationDocument
       })
@@ -88,6 +88,8 @@ City.find()
   // 4. insert new data
   .then(locationDocuments => {
     console.log('4')
+    // ## TODOS ##
+    // before insert, previous collection should be dropped
     return Location.insertMany(locationDocuments)
   })
   .then(result => {
