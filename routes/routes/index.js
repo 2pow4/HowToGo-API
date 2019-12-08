@@ -7,10 +7,6 @@ const Location = require('../../schemas/location')
 
 // router object and other sub-routers
 const router = express.Router()
-const gpsRouter = require('./gps')
-
-// /routes/gps
-router.use('/gps', gpsRouter)
 
 // /routes
 router.get('/', (req, res, next) => {
