@@ -2,7 +2,7 @@
  * Generating connection with mongoose
  * this module will be exported as a form of function
  * once it is excuted, it will generate new connection to MongoDB and keep connection
- * if any error occurs or connection is lost, `mongoose` will try to re-connect
+ * if any (err)or occurs or connection is lost, `mongoose` will try to re-connect
  */
 
 const mongoose = require('mongoose')
@@ -11,22 +11,22 @@ mongoose.Promise = global.Promise;
 module.exports = (dbUsername, dbPwd, dbIP, dbPort, dbName) => {
  const connect = () => {
    mongoose.set('debug', true)
-   mongoose.connect(`mongodb://${dbUsername}:${dbPwd}@${dbIP}:${dbPort}/${dbName}`, { dbName, useNewUrlParser: true }, (error) => {
-     if (error) {
-       console.log('MongoDB 연결 에러', error)
-     } else {
-       console.log('MongoDB 연결 성공')
-     }
-   })
+   return mongoose.connect(`mongodb://${dbUsername}:${dbPwd}@${dbIP}:${dbPort}/${dbName}`, { dbName, useNewUrlParser: true })
  }
 
- connect()
+ return connect()
+  .then((response) => {
+    console.log('MongoDB 연결 성공')
 
- mongoose.connection.on('error', (error) => {
-   console.error('MongoDB 연결 에러', error)
- });
- mongoose.connection.on('disconnected', () => {
-   console.error('MongoDB 연결이 끊겼습니다. 연결을 재시도합니다.')
-   connect()
- })
+    mongoose.connection.on('error', (error) => {
+      console.error('MongoDB 연결 에러', error)
+    });
+    mongoose.connection.on('disconnected', () => {
+      console.error('MongoDB 연결이 끊겼습니다. 연결을 재시도합니다.')
+      connect()
+    })
+  })
+  .catch((err) => {
+    console.error('MongoDB 연결 에러', err)
+  })
 }
