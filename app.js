@@ -5,11 +5,11 @@ require('dotenv').config()
 
 const port = process.env.PORT || 8080
 
-const dbUsername = process.env.dbUsername
-const dbPwd = process.env.dbPwd
-const dbIP = process.env.DB_IP || 'localhost'
-const dbPort = process.env.DB_PORT || 27017
-const dbName = process.env.DB_NAME || 'how-to-go'
+const dbUsername = process.env.DB_USERNAME
+const dbPwd = process.env.DB_PWD
+const dbIP = process.env.DB_IP
+const dbPort = process.env.DB_PORT
+const dbName = process.env.DB_NAME
 
 const connect = require('./schemas')
 

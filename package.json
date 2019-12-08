@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nodemon --exec node app"
+    "start": "npx nodemon --exec node app",
+    "updateCities": "node ./scripts/updateCities"
   },
   "repository": {
     "type": "git",

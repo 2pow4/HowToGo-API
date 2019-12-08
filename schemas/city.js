@@ -3,8 +3,8 @@ const { Schema } = mongoose
 const { ObjectId } = Schema.Types
 
 const citySchema = new Schema({
-  cityId: {
-    type: ObjectId,
+  cityCode: {
+    type: String,
     required: true,
   },
   cityName: {
@@ -19,7 +19,7 @@ const citySchema = new Schema({
   }
 })
 
-module.exports = mongoose.Model('City', citySchema)
+module.exports = mongoose.model('City', citySchema)
 
 // 정류소마다 gps 정보 추가하는건 지금 시간상 어려우므로
 // 도시마다 gps로 마족하고,

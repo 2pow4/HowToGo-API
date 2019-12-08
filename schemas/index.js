@@ -10,7 +10,7 @@ const mongoose = require('mongoose')
 module.exports = (dbUsername, dbPwd, dbIP, dbPort, dbName) => {
  const connect = () => {
    mongoose.set('debug', true)
-   mongoose.connect(`mongodb://${dbUsername}:${dbPwd}@${dbIP}:${dbPort}/${dbName}`, { dbName }, (error) => {
+   mongoose.connect(`mongodb://${dbUsername}:${dbPwd}@${dbIP}:${dbPort}/${dbName}`, { dbName, useNewUrlParser: true }, (error) => {
      if (error) {
        console.log('MongoDB 연결 에러', error)
      } else {
