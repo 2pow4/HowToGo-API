@@ -24,7 +24,7 @@ connect(dbUsername, dbPwd, dbIP, dbPort, dbName)
   })
   // 1. 한 도시코드에 대하여
   //    해당 도시코드를 통하여 정류소 조회
-  .then(cityList => {
+  .then(async cityList => {
     const locationFetchValues = cityList.map((city) => {
       const { cityCode } = city
       const locationFetchValue = {
@@ -67,27 +67,40 @@ connect(dbUsername, dbPwd, dbIP, dbPort, dbName)
   })
   // 3. 각 도시 별 > 도시 별 정류소
   //    drop previous collection if exists
-  .then(locationPromiseResultList => {
-    const locationDocuments = 
-    locationPromiseResultList.map((locationPromiseResult) => {
+  .then(async locationPromiseResultList => {
+    const locationDocumentsArrays = locationPromiseResultList.map((locationPromiseResult, index) => {
       const cityCode = locationPromiseResult.cityCode
-      const locations = locationPromiseResult.data.response.body.items
-      const locationsInCity = locations.map((locations) => {
+      const locations = locationPromiseResult.result.data.response.body.items.item
+      console.log(`${index} ${locations}`)
+      if (locations === undefined) {
+        return [] // 터미널 없는 경우
+      }
+      if (isArray(locations) === false) {
+        // 터미널이 단 하나인 경우
         const locationDocument = new Location({
           cityCode: cityCode,
           locationCode: locations.terminalId,
           locationName: locations.terminalNm,
           type: 'suburb',
         })
+        return [locationDocument]
+      }
+      const locationsInCity = locations.map((location) => {
+        const locationDocument = new Location({
+          cityCode: cityCode,
+          locationCode: location.terminalId,
+          locationName: location.terminalNm,
+          type: 'suburb',
+        })
         return locationDocument
       })
       return locationsInCity
     })
-    return locationDocuments
+    return locationDocumentsArrays
   })
   // 4. insert new data
-  .then(locationDocuments => {
-    console.log('4')
+  .then(locationDocumentsArrays => {
+    const locationDocuments = locationDocumentsArrays.reduce((acc, val) => acc.concat(val), [])
     // ## TODOS ##
     // before insert, previous collection should be dropped
     return Location.insertMany(locationDocuments)
