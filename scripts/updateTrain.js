@@ -5,6 +5,7 @@ const connect = require('../schemas')
 const path = require('path')
 require('dotenv').config()
 const axios = require('axios')
+const isArray = require('../utils/isArray')
 
 // gather setting values to connect database
 const dbUsername = process.env.DB_USERNAME
@@ -14,18 +15,19 @@ const dbPort = process.env.DB_PORT
 const dbName = process.env.DB_NAME
 const publicAPIKey = process.env.PUBLIC_API_KEY
 
-const City = require('../schemas/city')
+const Metrocity = require('../schemas/metrocity')
 const Location = require('../schemas/location')
 
 // 0-1. DB로부터 도시코드를 불러온다
 // 0-2. 해당 도시코드를 각각 이용하여 (약 100개) 정류소들을 불러온다
 connect(dbUsername, dbPwd, dbIP, dbPort, dbName)
   .then(() => {
-    return City.find()
+    return Metrocity.find()
   })
   // 1. 한 도시코드에 대하여
   //    각각의 해당 도시코드를 통하여 기차역 조회
-  .then(cityList => {
+  //    City가 아닌 Metrocity에서 도시 코드를 가져옴에 주의
+  .then(async cityList => {
     const locationFetchValues = cityList.map((city) => {
       const { cityCode } = city
       const locationFetchValue = {
@@ -68,11 +70,27 @@ connect(dbUsername, dbPwd, dbIP, dbPort, dbName)
   })
   // 3. 각 도시 별 > 도시 별 기차역
   //    drop previous collection if exists
-  .then(locationPromiseResultList => {
-    const locationDocuments = 
-    locationPromiseResultList.map((locationPromiseResult) => {
+  .then(async locationPromiseResultList => {
+    const locationDocumentsArrays = 
+    locationPromiseResultList.map((locationPromiseResult, index) => {
       const cityCode = locationPromiseResult.cityCode
-      const locations = locationPromiseResult.data.response.body.items
+      const locations = locationPromiseResult.result.data.response.body.items.item
+
+      // 해당 도시에 기차역이 없는 경우,
+      if (locations === undefined) {
+        return []
+      }
+      // 해당 도시에 기차역이 단 하나인 경우,
+      if (isArray(locations) === false) {
+        const locationDocument = new Location({
+          cityCode: cityCode,
+          locationCode: locations.nodeid,
+          locationName: locations.nodename,
+          type: 'train',
+        })
+        return [locationDocument]
+      }
+
       const locationsInCity = locations.map((locations) => {
         const locationDocument = new Location({
           cityCode: cityCode,
@@ -84,13 +102,11 @@ connect(dbUsername, dbPwd, dbIP, dbPort, dbName)
       })
       return locationsInCity
     })
-    return locationDocuments
+    return locationDocumentsArrays
   })
   // 4. insert new data (InsertMany)
-  .then(locationDocuments => {
-    console.log('4')
-    // ## TODOS ##
-    // before insert, previous collection should be dropped
+  .then(locationDocumentsArrays => {
+    const locationDocuments = locationDocumentsArrays.reduce((acc, val) => acc.concat(val), [])
     return Location.insertMany(locationDocuments)
   })
   .then(result => {

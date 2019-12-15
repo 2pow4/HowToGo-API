@@ -4,6 +4,7 @@ const connect = require('../schemas')
 const path = require('path')
 require('dotenv').config()
 const axios = require('axios')
+const isArray = require('../utils/isArray')
 
 // gather setting values to connect database
 const dbUsername = process.env.DB_USERNAME
@@ -71,12 +72,13 @@ connect(dbUsername, dbPwd, dbIP, dbPort, dbName)
     const locationDocumentsArrays = locationPromiseResultList.map((locationPromiseResult, index) => {
       const cityCode = locationPromiseResult.cityCode
       const locations = locationPromiseResult.result.data.response.body.items.item
-      console.log(`${index} ${locations}`)
+
+      // 해당 도시에 터미널이 없는 경우,
       if (locations === undefined) {
-        return [] // 터미널 없는 경우
+        return []
       }
+      // 해당 도시에 터미널이 단 하나인 경우,
       if (isArray(locations) === false) {
-        // 터미널이 단 하나인 경우
         const locationDocument = new Location({
           cityCode: cityCode,
           locationCode: locations.terminalId,
@@ -85,6 +87,7 @@ connect(dbUsername, dbPwd, dbIP, dbPort, dbName)
         })
         return [locationDocument]
       }
+
       const locationsInCity = locations.map((location) => {
         const locationDocument = new Location({
           cityCode: cityCode,
@@ -101,8 +104,6 @@ connect(dbUsername, dbPwd, dbIP, dbPort, dbName)
   // 4. insert new data
   .then(locationDocumentsArrays => {
     const locationDocuments = locationDocumentsArrays.reduce((acc, val) => acc.concat(val), [])
-    // ## TODOS ##
-    // before insert, previous collection should be dropped
     return Location.insertMany(locationDocuments)
   })
   .then(result => {

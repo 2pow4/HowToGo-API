@@ -7,8 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx nodemon --exec node app",
     "updateCities": "node ./scripts/updateCities",
+    "updateMetrocities": "node ./scripts/updateMetrocities",
     "updateSuburb": "node ./scripts/updateSuburb",
     "updateExpress": "node ./scripts/updateExpress",
+    "updateTrain": "node ./scripts/updateTrain",
+    "updateAir": "node ./scripts/updateAir",
     "clearLocations": "node ./scripts/clearLocations"
   },
   "repository": {
